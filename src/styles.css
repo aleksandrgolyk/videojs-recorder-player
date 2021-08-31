@@ -3,11 +3,28 @@ body {
 }
 
 #myVideo {
-  background-color: #f0506e;
+  background-color: #45a6ef;
 }
-
+*button{
+  cursor: pointer;
+}
 .active {
   color: #fff;
-  background-color: #f0506e;
+  background-color: #45a6ef;
   padding: 8px;
+}
+.uk-icon-button{
+  cursor: pointer;
+}
+
+.video-js{
+  border-radius: 8px;
+}
+.vjs-control-bar{
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.vjs-icon-audio-perm:before {
+  content: "\f107";
 }

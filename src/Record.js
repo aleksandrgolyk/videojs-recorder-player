@@ -72,7 +72,7 @@ function Record({audio, video, screen, image}) {
         <video
             id="myVideo"
             ref={videoNode}
-            className="video-js vjs-default-skin"
+            className="video-js vjs-default-skin vjs-big-play-centered"
             // playsInline
         />
       </div>
