@@ -1,0 +1,13 @@
+body {
+  font-family: sans-serif;
+}
+
+#myVideo {
+  background-color: #f0506e;
+}
+
+.active {
+  color: #fff;
+  background-color: #f0506e;
+  padding: 8px;
+}
