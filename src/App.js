@@ -4,7 +4,10 @@ import RecordRTC from "recordrtc";
 import "videojs-record/dist/css/videojs.record.css";
 import "videojs-record/dist/videojs.record.js";
 import "./styles.css";
-import { useEffect, useRef } from "react";
+import './Recorder/Recorder.styles.css'
+import {useEffect, useRef, useState} from "react";
+
+import SwitchInputDevice from "./Recorder/SwitchInputDevice";
 
 let options = {
   controls: true,
@@ -26,101 +29,44 @@ let options = {
 
 export default function App() {
   const inputDeviceIdIndex = useRef(0);
+  const [player, setPlayer] = useState({})
+  const [rec, setRec] = useState(false)
+  const [showRec, setShowRec] = useState(false)
+
+  let recButtonApear = () => {
+    setShowRec(true)
+  }
+
   useEffect(() => {
     let player = videojs("myVideo", options, function () {
       // print version information at startup to console
-      let msg =
-        "Using video.js " +
-        videojs.VERSION +
-        " with videojs-record " +
-        videojs.getPluginVersion("record") +
-        " and recordrtc " +
-        RecordRTC.version;
-      videojs.log(msg);
     });
+    setPlayer(player)
 
     // Helpers
-
     function setDeviceId(deviceId) {
-      player.record().setVideoInput(deviceId);
+      player?.record()?.setVideoInput(deviceId);
     }
 
-
-    // enumerate devices once
-    player.one("deviceReady", function () {
-      player.record().enumerateDevices();
-    });
-
-    player.on("enumerateReady", function () {
-      const devices = player.record().devices;
-
-      // Filter out video input devices
-      const videoInputDevices = devices.filter(
-        ({ kind }) => kind === "videoinput"
-      );
-
-      // change video input device
-      setDeviceId(videoInputDevices[inputDeviceIdIndex.current].deviceId);
-
-      console.log(videoInputDevices);
-
-      // Add switch camera btn
-      let Button = videojs.getComponent("Button");
-      let SwitchCameraBtn = videojs.extend(Button, {
-        constructor: function () {
-          Button.apply(this, arguments);
-          /* initialize your button */
-          this.controlText("Switch camera");
-        },
-        handleClick: function () {
-          // Switch camera on click
-          inputDeviceIdIndex.current =
-            (inputDeviceIdIndex.current + 1) % videoInputDevices.length;
-
-          setDeviceId(videoInputDevices[inputDeviceIdIndex.current].deviceId);
-        },
-        buildCSSClass: function () {
-          return "vjs-icon-spinner vjs-control vjs-button";
-        }
-      });
-      videojs.registerComponent("SwitchCameraBtn", SwitchCameraBtn);
-
-      player
-        .getChild("controlBar")
-        .addChild(
-          "SwitchCameraBtn",
-          {},
-          player.controlBar.children().length - 2
-        );
-    });
-
-    // error handling
-    player.on("deviceError", function () {
-      console.log("device error:", player.deviceErrorCode);
-    });
-
-    player.on("error", function (element, error) {
-      console.error(error);
-    });
+    player?.record()?.getDevice()
+    player.on("deviceReady", recButtonApear)
+    // setShowRec(true)
 
     // user clicked the record button and started recording
-    player.on("startRecord", function () {
-      console.log("started recording!");
-    });
+    // player.on("startRecord", function () {
+    //   console.log("started recording!");
+    // });
 
     // user completed recording
 
-    player.on("finishRecord", async function () {
-      console.log("finished recording");
-      console.log({ stream: player.recordedData });
-      //saving record after stop recording
-      player.record().saveAs({'video': 'my-video-file-name.mp4'});
-      console.log("recording saved");
-    });
+    // player.on("finishRecord", async function () {
+    //   console.log("finished recording");
+    //   console.log({stream: player.recordedData});
+    //saving record after stop recording
+    // player.record().saveAs({'video': 'my-video-file-name.mp4'});
+    // console.log("recording saved");
+    // });
     // user completed recording
-
-
-
 
     // monitor stream data during recording
     player.on("timestamp", function () {
@@ -134,11 +80,26 @@ export default function App() {
     });
   }, []);
 
+  const onRecord = () => {
+    player?.record()?.start();
+    console.log("Media recording is going!");
+    setRec(true)
+    console.log(rec);
+  }
+  const onStop = () => {
+    player?.record()?.stop();
+    setRec(false)
+    console.log("Media recording was stoped!");
+  }
+
   return (
-    <div className="App">
-      <div>
-        <video id="myVideo" playsInline className="video-js vjs-default-skin" />
+      <div className="App" style={{position: 'relative'}}>
+        <video id="myVideo" playsInline className="video-js vjs-default-skin"/>
+        {showRec && <div className='buttonWrapper'>
+          {rec ? <button className='playerStopButton' onClick={onStop}/> :
+              <button className='playerRecordButton' onClick={onRecord}/>}
+        </div>}
+        {/*<SwitchInputDevice player={player}/>*/}
       </div>
-    </div>
   );
 }
