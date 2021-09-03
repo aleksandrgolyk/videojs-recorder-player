@@ -2,7 +2,7 @@ import React from 'react';
 
 export function options({audio, video}) {
   return {
-    controls: true,
+    controls: false,
     bigPlayButton: false,
     width: 800,
     height: 600,
@@ -11,6 +11,7 @@ export function options({audio, video}) {
       record: {
         audio: true, //allow record with audio
         video: true,
+        loop:true,
         maxLength: 30, //set video record duration in sec.
         displayMilliseconds: false,
         // fire the timestamp event every 5 seconds

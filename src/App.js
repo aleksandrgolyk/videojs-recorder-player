@@ -6,18 +6,20 @@ import "videojs-record/dist/videojs.record.js";
 import "./styles.css";
 import './Recorder/Recorder.styles.css'
 // import {options} from './Recorder/Options'
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState, Spinner} from "react";
 
 import SwitchInputDevice from "./Recorder/SwitchInputDevice";
 
 let options = {
-  controls: true,
+  controls: false,
   bigPlayButton: false,
   width: 800,
   height: 600,
+  // loop:true,
   // fluid: true,
   autoplay: true,
   plugins: {
+
     record: {
       audio: true, //allow record with audio
       video: true,
@@ -33,11 +35,19 @@ export default function App() {
   const inputDeviceIdIndex = useRef(0);
   const [player, setPlayer] = useState({})
   const [record, setRecord] = useState(false)
-  const [showRec, setShowRec] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [isRecordButtonsBlockShowing, setIsRecordButtonsBlockShowing] = useState(true)
 
-  let recButtonAppear = () => {
-    setShowRec(true)
+  const [showApproveButtonsBlock, setShowApproveButtonsBlock] = useState(false)
+
+  // record button manipulation - start -
+  const recordButtonsBlockAppear = () => {
+    setLoading(false)
   }
+  const recordButtonsBlockDisappear = () => {
+    setIsRecordButtonsBlockShowing(false)
+  }
+  // record button manipulation - end -
 
   useEffect(() => {
     let player = videojs("myVideo", options, function () {
@@ -52,8 +62,11 @@ export default function App() {
     }
 
     player.record().getDevice()
-    player.on("deviceReady", recButtonAppear)
-    // setShowRec(true)
+
+    //Appear record button on pade load
+    player.on("deviceReady", recordButtonsBlockAppear)
+
+    // player.play("replay", recordButtonsBlockDisappear);
 
     // player.on("finishRecord", function () {
     // })
@@ -64,6 +77,7 @@ export default function App() {
 
     // user completed recording
 
+    player.on("finishRecord", recordButtonsBlockDisappear)
     // player.on("finishRecord", async function () {
     //   console.log("finished recording");
     //   console.log({stream: player.recordedData});
@@ -99,17 +113,45 @@ export default function App() {
   }
 
   const onReplayRecord = () => {
+    setRecord(false)
     player?.play();
-}
+  }
 
   return (
       <div className="App" style={{position: 'relative'}}>
         <video id="myVideo" playsInline className="video-js vjs-default-skin"/>
-        {showRec && <div className='buttonWrapper'>
-          {record ? <button className='playerStopButton' onClick={onStop}/> :
-              <button className='playerRecordButton' onClick={onRecord}/>}
-        </div>}
-        <button className='vjs-play-control' onClick={onReplayRecord}>Play</button>
+        {loading ? <div className='spinner-wrapper'>
+          <div className="lds-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div> : <> {isRecordButtonsBlockShowing ?
+            <div className='recordButtonsGroupWrapper'>
+              {record ? <button className='recorderButtons recorderStopButton' onClick={onStop}/> :
+                  <button className='recorderButtons recorderRecordButton' onClick={onRecord}/>}
+            </div> :
+            <div className='approveVideoBlock'>
+              <div>Like it?</div>
+              <button className='approveVideoBlock approveBtn' onClick={onStop}>YES</button>
+              <button className='approveVideoBlock refuseBtn' onClick={onRecord}>NO</button>
+            </div>
+        }
+        </>
+
+
+        }
+
+        <button className='vjs-play-control' onClick={onReplayRecord}>Replay</button>
         {/*<SwitchInputDevice player={player}/>  /* for nex improvements*/}
       </div>
   );
