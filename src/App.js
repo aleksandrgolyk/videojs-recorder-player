@@ -5,6 +5,7 @@ import "videojs-record/dist/css/videojs.record.css";
 import "videojs-record/dist/videojs.record.js";
 import "./styles.css";
 import './Recorder/Recorder.styles.css'
+// import {options} from './Recorder/Options'
 import {useEffect, useRef, useState} from "react";
 
 import SwitchInputDevice from "./Recorder/SwitchInputDevice";
@@ -15,6 +16,7 @@ let options = {
   width: 800,
   height: 600,
   // fluid: true,
+  autoplay: true,
   plugins: {
     record: {
       audio: true, //allow record with audio
@@ -30,10 +32,10 @@ let options = {
 export default function App() {
   const inputDeviceIdIndex = useRef(0);
   const [player, setPlayer] = useState({})
-  const [rec, setRec] = useState(false)
+  const [record, setRecord] = useState(false)
   const [showRec, setShowRec] = useState(false)
 
-  let recButtonApear = () => {
+  let recButtonAppear = () => {
     setShowRec(true)
   }
 
@@ -43,15 +45,18 @@ export default function App() {
     });
     setPlayer(player)
 
+
     // Helpers
     function setDeviceId(deviceId) {
       player?.record()?.setVideoInput(deviceId);
     }
 
-    player?.record()?.getDevice()
-    player.on("deviceReady", recButtonApear)
+    player.record().getDevice()
+    player.on("deviceReady", recButtonAppear)
     // setShowRec(true)
 
+    // player.on("finishRecord", function () {
+    // })
     // user clicked the record button and started recording
     // player.on("startRecord", function () {
     //   console.log("started recording!");
@@ -83,23 +88,29 @@ export default function App() {
   const onRecord = () => {
     player?.record()?.start();
     console.log("Media recording is going!");
-    setRec(true)
-    console.log(rec);
+    setRecord(true)
+    console.log(record);
   }
   const onStop = () => {
     player?.record()?.stop();
-    setRec(false)
-    console.log("Media recording was stoped!");
+    setRecord(false)
+    // player.record().recordedData.play()
+    console.log("Media recording was stopped!");
   }
+
+  const onReplayRecord = () => {
+    player?.play();
+}
 
   return (
       <div className="App" style={{position: 'relative'}}>
         <video id="myVideo" playsInline className="video-js vjs-default-skin"/>
         {showRec && <div className='buttonWrapper'>
-          {rec ? <button className='playerStopButton' onClick={onStop}/> :
+          {record ? <button className='playerStopButton' onClick={onStop}/> :
               <button className='playerRecordButton' onClick={onRecord}/>}
         </div>}
-        {/*<SwitchInputDevice player={player}/>*/}
+        <button className='vjs-play-control' onClick={onReplayRecord}>Play</button>
+        {/*<SwitchInputDevice player={player}/>  /* for nex improvements*/}
       </div>
   );
 }
