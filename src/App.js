@@ -1,14 +1,13 @@
-import "video.js/dist/video-js.min.css";
-import videojs from "video.js";
-import RecordRTC from "recordrtc";
-import "videojs-record/dist/css/videojs.record.css";
-import "videojs-record/dist/videojs.record.js";
-import "./styles.css";
+import 'video.js/dist/video-js.min.css'
+import videojs from 'video.js'
+import RecordRTC from 'recordrtc'
+import 'videojs-record/dist/css/videojs.record.css'
+import 'videojs-record/dist/videojs.record.js'
+import './styles.css'
 import './Recorder/Recorder.styles.css'
-// import {options} from './Recorder/Options'
-import {useEffect, useRef, useState, Spinner} from "react";
+import { useEffect, useRef, useState } from 'react'
 
-import SwitchInputDevice from "./Recorder/SwitchInputDevice";
+import SwitchInputDevice from './Recorder/SwitchInputDevice'
 
 let options = {
   controls: false,
@@ -19,7 +18,6 @@ let options = {
   // fluid: true,
   autoplay: true,
   plugins: {
-
     record: {
       audio: true, //allow record with audio
       video: true,
@@ -29,16 +27,15 @@ let options = {
       timeSlice: 2000
     }
   }
-};
+}
 
 export default function App() {
-  const inputDeviceIdIndex = useRef(0);
+  const inputDeviceIdIndex = useRef(0)
   const [player, setPlayer] = useState({})
   const [record, setRecord] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [isRecordButtonsBlockShowing, setIsRecordButtonsBlockShowing] = useState(true)
-
-  const [showApproveButtonsBlock, setShowApproveButtonsBlock] = useState(false)
+  const [isRecordButtonsBlockShowing, setIsRecordButtonsBlockShowing] =
+    useState(true)
 
   // record button manipulation - start -
   const recordButtonsBlockAppear = () => {
@@ -50,23 +47,20 @@ export default function App() {
   // record button manipulation - end -
 
   useEffect(() => {
-    let player = videojs("myVideo", options, function () {
+    let player = videojs('myVideo', options, function () {
       // print version information at startup to console
-    });
+    })
     setPlayer(player)
-
 
     // Helpers
     function setDeviceId(deviceId) {
-      player?.record()?.setVideoInput(deviceId);
+      player?.record()?.setVideoInput(deviceId)
     }
 
     player.record().getDevice()
 
     //Appear record button on pade load
-    player.on("deviceReady", recordButtonsBlockAppear)
-
-    // player.play("replay", recordButtonsBlockDisappear);
+    player.on('deviceReady', recordButtonsBlockAppear)
 
     // player.on("finishRecord", function () {
     // })
@@ -77,7 +71,7 @@ export default function App() {
 
     // user completed recording
 
-    player.on("finishRecord", recordButtonsBlockDisappear)
+    player.on('finishRecord', recordButtonsBlockDisappear)
     // player.on("finishRecord", async function () {
     //   console.log("finished recording");
     //   console.log({stream: player.recordedData});
@@ -88,7 +82,7 @@ export default function App() {
     // user completed recording
 
     // monitor stream data during recording
-    player.on("timestamp", function () {
+    player.on('timestamp', function () {
       // console.log("current timestamp: ", player.currentTimestamp);
       // console.log(
       //   "all timestamps (" + player.allTimestamps.length + "): ",
@@ -96,31 +90,33 @@ export default function App() {
       // );
       // // stream data
       // console.log({ stream: player.recordedData });
-    });
-  }, []);
+    })
+  }, [])
 
-  const onRecord = () => {
-    player?.record()?.start();
-    console.log("Media recording is going!");
+  // user clicked the record button and started recording
+  const onRecordStart = () => {
+    player?.record()?.start()
+    console.log('Media recording is going!')
     setRecord(true)
-    console.log(record);
+    console.log(record)
   }
-  const onStop = () => {
-    player?.record()?.stop();
+  // user clicked the stop record button and stopped recording
+  const onRecordStop = () => {
+    player?.record()?.stop()
     setRecord(false)
-    // player.record().recordedData.play()
-    console.log("Media recording was stopped!");
+    console.log('Media recording was stopped!')
   }
 
   const onReplayRecord = () => {
     setRecord(false)
-    player?.play();
+    player?.play()
   }
 
   return (
-      <div className="App" style={{position: 'relative'}}>
-        <video id="myVideo" playsInline className="video-js vjs-default-skin"/>
-        {loading ? <div className='spinner-wrapper'>
+    <div className="App" style={{ position: 'relative' }}>
+      <video id="myVideo" playsInline className="video-js vjs-default-skin" />
+      {loading ? (
+        <div className="spinner-wrapper">
           <div className="lds-spinner">
             <div></div>
             <div></div>
@@ -135,24 +131,52 @@ export default function App() {
             <div></div>
             <div></div>
           </div>
-        </div> : <> {isRecordButtonsBlockShowing ?
-            <div className='recordButtonsGroupWrapper'>
-              {record ? <button className='recorderButtons recorderStopButton' onClick={onStop}/> :
-                  <button className='recorderButtons recorderRecordButton' onClick={onRecord}/>}
-            </div> :
-            <div className='approveVideoBlock'>
-              <div>Like it?</div>
-              <button className='approveVideoBlock approveBtn' onClick={onStop}>YES</button>
-              <button className='approveVideoBlock refuseBtn' onClick={onRecord}>NO</button>
+        </div>
+      ) : (
+        <>
+          {isRecordButtonsBlockShowing ? (
+            <div className="recordButtonsGroupWrapper">
+              {record ? (
+                <button
+                  className="recorderButtons recorderStopButton"
+                  onClick={onRecordStop}
+                />
+              ) : (
+                <button
+                  className="recorderButtons recorderRecordButton"
+                  onClick={onRecordStart}
+                />
+              )}
             </div>
-        }
+          ) : (
+            <div className="approveVideoBlock">
+              <div className="approveVideoBlockQuestion">Like it?</div>
+              <div className="approveVideoBlockBtnGroup">
+                <button
+                  className="approveVideoBlockBtn approveBtn"
+                  // onClick={() => console.log('1')}>
+                  onClick={console.log('bad video_')}>
+                  YES
+                </button>
+                <button
+                  className="approveVideoBlockBtn refuseBtn"
+                  onClick={(e) => {
+                    setIsRecordButtonsBlockShowing(true)
+                  }}>
+                  NO
+                </button>
+                <button
+                  className="approveVideoBlockBtn replayBtn"
+                  onClick={onReplayRecord}>
+                  {/*Replay*/}
+                </button>
+              </div>
+            </div>
+          )}
         </>
+      )}
 
-
-        }
-
-        <button className='vjs-play-control' onClick={onReplayRecord}>Replay</button>
-        {/*<SwitchInputDevice player={player}/>  /* for nex improvements*/}
-      </div>
-  );
+      {/*<SwitchInputDevice player={player}/>  /* for nex improvements*/}
+    </div>
+  )
 }

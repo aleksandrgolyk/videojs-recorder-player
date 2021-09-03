@@ -11,11 +11,16 @@
   align-items: center;
   margin-top: 10px;
 }
-
+.video-js{
+  background-color: transparent;
+}
 #myVideo {
-  background-color: #374b6b;
+  background-color: transparent;
 }
 
+.vjs-device-button{
+  display: none !important;
+}
 .switch-camera {
   content: "switch";
   cursor: pointer;
