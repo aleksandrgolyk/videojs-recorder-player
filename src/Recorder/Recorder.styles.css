@@ -91,11 +91,12 @@
 }
 .replayBtn:hover{
     background: rgba(255, 60, 76, 1);
+    transform: scale(1.1);
+
 
 }
 .replayBtn:before {
     content: "\25b6";
-    transform: scale(1.1);
 }
 
 .approveBtn {

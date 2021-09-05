@@ -7,13 +7,11 @@ import './styles.css'
 import './Recorder/Recorder.styles.css'
 import { useEffect, useRef, useState } from 'react'
 
-import SwitchInputDevice from './Recorder/SwitchInputDevice'
-
 let options = {
-  controls: false,
+  // controls: true,
   bigPlayButton: false,
-  width: 800,
-  height: 600,
+  // width: 800,
+  // height: 600,
   // loop:true,
   // fluid: true,
   autoplay: true,
@@ -61,27 +59,12 @@ export default function App() {
 
     //Appear record button on pade load
     player.on('deviceReady', recordButtonsBlockAppear)
-
-    // player.on("finishRecord", function () {
-    // })
-    // user clicked the record button and started recording
-    // player.on("startRecord", function () {
-    //   console.log("started recording!");
-    // });
-
-    // user completed recording
+    player.on('ended', function () {
+      player.record().getDevice()
+    })
 
     player.on('finishRecord', recordButtonsBlockDisappear)
-    // player.on("finishRecord", async function () {
-    //   console.log("finished recording");
-    //   console.log({stream: player.recordedData});
-    //saving record after stop recording
-    // player.record().saveAs({'video': 'my-video-file-name.mp4'});
-    // console.log("recording saved");
-    // });
-    // user completed recording
 
-    // monitor stream data during recording
     player.on('timestamp', function () {
       // console.log("current timestamp: ", player.currentTimestamp);
       // console.log(
@@ -142,10 +125,12 @@ export default function App() {
                   onClick={onRecordStop}
                 />
               ) : (
-                <button
-                  className="recorderButtons recorderRecordButton"
-                  onClick={onRecordStart}
-                />
+                <div>
+                  <button
+                    className="recorderButtons recorderRecordButton"
+                    onClick={onRecordStart}
+                  />
+                </div>
               )}
             </div>
           ) : (
