@@ -6,6 +6,8 @@ import 'videojs-record/dist/videojs.record.js'
 import './styles.css'
 import './Recorder/Recorder.styles.css'
 import { useEffect, useRef, useState } from 'react'
+import magnetButton from './Recorder/helpers/magnetButton'
+import Spinner from './components/Spinner/Spinner'
 
 let options = {
   // controls: true,
@@ -59,8 +61,9 @@ export default function App() {
 
     //Appear record button on pade load
     player.on('deviceReady', recordButtonsBlockAppear)
+    player.on('deviceReady', magnetButton)
     player.on('ended', function () {
-      player.record().getDevice()
+      player.record().reset()
     })
 
     player.on('finishRecord', recordButtonsBlockDisappear)
@@ -99,33 +102,20 @@ export default function App() {
     <div className="App" style={{ position: 'relative' }}>
       <video id="myVideo" playsInline className="video-js vjs-default-skin" />
       {loading ? (
-        <div className="spinner-wrapper">
-          <div className="lds-spinner">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        </div>
+        <Spinner blocks={12} />
       ) : (
         <>
           {isRecordButtonsBlockShowing ? (
             <div className="recordButtonsGroupWrapper">
               {record ? (
-                <button
-                  className="recorderButtons recorderStopButton"
-                  onClick={onRecordStop}
-                />
+                <div className="magnetWrapper">
+                  <button
+                    className="recorderButtons recorderStopButton"
+                    onClick={onRecordStop}
+                  />
+                </div>
               ) : (
-                <div>
+                <div className="magnetWrapper">
                   <button
                     className="recorderButtons recorderRecordButton"
                     onClick={onRecordStart}
