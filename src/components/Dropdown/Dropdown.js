@@ -36,29 +36,18 @@ const Dropdown = ({ deviceList, id, type, isVideo, isAudio, player }) => {
 
   function onDropdownItemClick(e) {
     setIsDropdownMenuVisible(false)
-    // console.log('innerText:', e.target.innerText)
-    // console.log(
-    //   'videoDevices',
-    //   videoDevices,
-    // console.log('deviceList:', deviceList)
-    const a = e?.target?.innerText
-    const selectedDevice = deviceList?.filter((device) => device?.label === a)
-    // console.log(selectedDevice)
-    // ===ARTUR====
-    // const obj = selectedDevice.reduce(
-    // (prev, cur) => ({ ...prev, [cur.label]: cur }),
-    // {}
-    // )
-    // ===ARTUR====
-
+    // Filter all items and return clicked one
+    const getCurrentitem = e?.target?.innerText
+    const selectedDevice = deviceList?.filter(
+      (device) => device?.label === getCurrentitem
+    )
+    //convert array of devices to object
     const obj = selectedDevice.reduce((prev, cur) => (prev, cur), {})
-    // player.record().setVideoInput(obj.deviceId)
+    //change video/audio input devices
     if (obj?.kind === 'videoinput') {
       player.record().setVideoInput(obj.deviceId)
     }
     if (obj?.kind === 'audioinput') player.record().setAudioInput(obj.deviceId)
-    // )
-    // console.log(videoDevices)
   }
 
   return (
