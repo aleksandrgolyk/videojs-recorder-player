@@ -9,6 +9,8 @@ import { useEffect, useRef, useState } from 'react'
 import magnetButton from './helpers/magnetButton'
 import Spinner from '../components/Spinner/Spinner'
 import Dropdown from '../components/Dropdown/Dropdown'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 let options = {
   // controls: true,
@@ -97,13 +99,14 @@ export default function Recorder() {
       // console.log({ stream: player.recordedData });
     })
   }, [])
-  // ======find all devices===
-  // const onGetDeviceList = () => {
-  //   player.record().enumerateDevices()
-  //   const devices = player.record().devices
-  //   console.log(devices)
-  // }
-  // ======find all devices===
+  // ====== split all devices to video and audio block ===
+  const videoDevices = isGettingDevices.filter(
+    (item) => item.kind === 'videoinput'
+  )
+  const audioDevices = isGettingDevices.filter(
+    (item) => item.kind === 'audioinput'
+  )
+  // ====== split all devices to video and audio block ===
 
   // user clicked the record button and started recording
   const onRecordStart = () => {
@@ -127,9 +130,10 @@ export default function Recorder() {
   return (
     <div className="App" style={{ position: 'relative' }}>
       <video id="myVideo" playsInline className="video-js vjs-default-skin" />
-
-      <Dropdown isAudio isGettingDevices={isGettingDevices} />
-      <Dropdown isVideo isGettingDevices={isGettingDevices} />
+      <div className="deviceSelectionWrapper" style={{ display: 'flex' }}>
+        <Dropdown isGettingDevices={videoDevices} id={1} type={'Cs'} />
+        <Dropdown isGettingDevices={audioDevices} id={2} type={'As'} />
+      </div>
       {loading ? (
         <Spinner />
       ) : (
