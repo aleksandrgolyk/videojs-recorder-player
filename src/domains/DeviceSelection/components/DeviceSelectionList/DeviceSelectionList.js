@@ -2,11 +2,23 @@ import React from 'react'
 import Dropdown from '../../../../components/Dropdown/Dropdown'
 import { StyledDeviceSelectionList } from './DeviceSelection.styles'
 
-const DeviceSelectionList = ({ videoDevices, audioDevices }) => {
+const DeviceSelectionList = ({ videoDevices, audioDevices, player }) => {
   return (
     <StyledDeviceSelectionList>
-      <Dropdown isGettingDevices={videoDevices} id={1} type={'Cs'} />
-      <Dropdown isGettingDevices={audioDevices} id={2} type={'As'} />
+      <Dropdown
+        deviceList={videoDevices}
+        player={player}
+        isVideo
+        id={1}
+        type={'Cs'}
+      />
+      <Dropdown
+        deviceList={audioDevices}
+        player={player}
+        isAudio
+        id={2}
+        type={'As'}
+      />
     </StyledDeviceSelectionList>
   )
 }

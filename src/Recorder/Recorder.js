@@ -11,6 +11,7 @@ import Spinner from '../components/Spinner/Spinner'
 import Dropdown from '../components/Dropdown/Dropdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import DeviceSelectionList from '../domains/DeviceSelection/components/DeviceSelectionList'
 
 let options = {
   // controls: true,
@@ -39,7 +40,7 @@ export default function Recorder() {
   const [player, setPlayer] = useState({})
   const [record, setRecord] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [isGettingDevices, setIsGettingDevices] = useState([])
+  const [deviceList, setDeviceDeviceList] = useState([])
   const [isRecordButtonsBlockShowing, setIsRecordButtonsBlockShowing] =
     useState(true)
 
@@ -72,7 +73,7 @@ export default function Recorder() {
     player.on('enumerateReady', function () {
       const devices = player.record().devices
       // const mediaDevices = console.log(mediaDevices)
-      setIsGettingDevices(devices)
+      setDeviceDeviceList(devices)
       // console.log(devices)
     })
     // ===== DEVICES TRACKING AND SHOW SECTION ---end ----
@@ -100,14 +101,10 @@ export default function Recorder() {
     })
   }, [])
   // ====== split all devices to video and audio block ===
-  const videoDevices = isGettingDevices.filter(
-    (item) => item.kind === 'videoinput'
-  )
-  const audioDevices = isGettingDevices.filter(
-    (item) => item.kind === 'audioinput'
-  )
+  const videoDevices = deviceList.filter((item) => item.kind === 'videoinput')
+  // console.log(videoDevices[0]?.deviceId)
+  const audioDevices = deviceList.filter((item) => item.kind === 'audioinput')
   // ====== split all devices to video and audio block ===
-
   // user clicked the record button and started recording
   const onRecordStart = () => {
     player?.record()?.start()
@@ -130,10 +127,11 @@ export default function Recorder() {
   return (
     <div className="App" style={{ position: 'relative' }}>
       <video id="myVideo" playsInline className="video-js vjs-default-skin" />
-      <div className="deviceSelectionWrapper" style={{ display: 'flex' }}>
-        <Dropdown isGettingDevices={videoDevices} id={1} type={'Cs'} />
-        <Dropdown isGettingDevices={audioDevices} id={2} type={'As'} />
-      </div>
+      <DeviceSelectionList
+        player={player}
+        videoDevices={videoDevices}
+        audioDevices={audioDevices}
+      />
       {loading ? (
         <Spinner />
       ) : (

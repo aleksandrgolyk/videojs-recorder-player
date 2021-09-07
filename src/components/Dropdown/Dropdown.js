@@ -7,11 +7,15 @@ import {
   StyledDropdownItemBtn
 } from './Dropdown.styles'
 
-const Dropdown = ({ isGettingDevices, id, type }) => {
+const Dropdown = ({ deviceList, id, type, isVideo, isAudio, player }) => {
+  // console.log('videoDevices:!!!!', videoDevices)
+  // console.log('videoDevices:!!!!', videoDevices)
+  // console.log('deviceList', deviceList)
   const ref = useRef()
   const [isDropdownMenuVisible, setIsDropdownMenuVisible] = useState(false)
 
   useEffect(() => {
+    //click outside Dropdown collapse it
     const clickOutsideCheck = (e) => {
       if (
         isDropdownMenuVisible &&
@@ -22,23 +26,39 @@ const Dropdown = ({ isGettingDevices, id, type }) => {
       }
     }
     document.addEventListener('mousedown', clickOutsideCheck)
-    console.log('clicked outside dropdown')
   }, [isDropdownMenuVisible])
 
-  /* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
   function onDropdownClick() {
-    // document.getElementById(id.toString()).classList.toggle('show')
-    console.log('set visible')
     !isDropdownMenuVisible
       ? setIsDropdownMenuVisible(true)
       : setIsDropdownMenuVisible(false)
   }
 
-  function onDropdownItemClick() {
-    // document.getElementById(id.toString()).classList.toggle('show')
-    console.log('not visible ')
+  function onDropdownItemClick(e) {
     setIsDropdownMenuVisible(false)
+    // console.log('innerText:', e.target.innerText)
+    // console.log(
+    //   'videoDevices',
+    //   videoDevices,
+    // console.log('deviceList:', deviceList)
+    const a = e?.target?.innerText
+    const selectedDevice = deviceList?.filter((device) => device?.label === a)
+    // console.log(selectedDevice)
+    // ===ARTUR====
+    // const obj = selectedDevice.reduce(
+    // (prev, cur) => ({ ...prev, [cur.label]: cur }),
+    // {}
+    // )
+    // ===ARTUR====
+
+    const obj = selectedDevice.reduce((prev, cur) => (prev, cur), {})
+    // player.record().setVideoInput(obj.deviceId)
+    if (obj?.kind === 'videoinput') {
+      player.record().setVideoInput(obj.deviceId)
+    }
+    if (obj?.kind === 'audioinput') player.record().setAudioInput(obj.deviceId)
+    // )
+    // console.log(videoDevices)
   }
 
   return (
@@ -48,7 +68,7 @@ toggle between hiding and showing the dropdown content */
       </StyledDropdownButton>
       {isDropdownMenuVisible && (
         <StyledDropdownItem id={id}>
-          {isGettingDevices?.map((device, index) => (
+          {deviceList?.map((device, index) => (
             <StyledDropdownItemBtn key={index} onClick={onDropdownItemClick}>
               {device.label}
             </StyledDropdownItemBtn>
