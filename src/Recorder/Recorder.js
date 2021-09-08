@@ -30,7 +30,7 @@ if (!('pictureInPictureEnabled' in document)) {
 // ===PiP options===
 
 let options = {
-  // controls: true,
+  controls: true,
   bigPlayButton: false,
   width: 800,
   height: 600,
@@ -39,12 +39,13 @@ let options = {
   autoplay: true,
   plugins: {
     record: {
+      screen: true,
       audio: true, //allow record with audio
       video: true,
       maxLength: 30, //set video record duration in sec.
       displayMilliseconds: false,
       // fire the timestamp event every 5 seconds
-      timeSlice: 2000,
+      timeSlice: 5000,
       pip: pipEnabled,
       debug: true
       // frameWidth: 640,
@@ -98,7 +99,7 @@ export default function Recorder() {
     player.on('deviceReady', recordButtonsBlockAppear)
     player.on('deviceReady', magnetButton)
     player.on('ended', function () {
-      player.record().reset()
+      // player.record().reset()
     })
 
     // ====PiP==== start
@@ -160,12 +161,16 @@ export default function Recorder() {
     player?.record()?.stop()
     setRecord(false)
     console.log('Media recording was stopped!')
+    console.log('finished recording: ', player.recordedData)
   }
 
   const onReplayRecord = () => {
     setRecord(false)
     player?.play()
     console.log('video replaying')
+  }
+  const onApproveRecord = () => {
+    player.record().saveAs({ video: 'my-video-file-name.webm' })
   }
 
   const togglePip = async () => {
@@ -178,9 +183,18 @@ export default function Recorder() {
     }
   }
 
+  // ============Screen recorder===========
+  // ============Screen recorder===========
+
+  const onScreenRecord = () => {
+    // player?.current.record().loadOptions(createRecordOptions{audio, video, screen, image}))
+    console.log('', player.recorded)
+  }
+
   return (
     <div className="App" style={{ position: 'relative' }}>
       <video id="myVideo" playsInline className="video-js vjs-default-skin" />
+      <button onClick={onScreenRecord}>screen</button>
       {loading ? (
         <Spinner />
       ) : (
@@ -207,6 +221,7 @@ export default function Recorder() {
               setShowRecordButtonsBlock={setShowRecordButtonsBlock}
               setShowDeviceSelectionList={setShowDeviceSelectionList}
               onReplayRecord={onReplayRecord}
+              onApproveRecord={onApproveRecord}
             />
           )}
         </>

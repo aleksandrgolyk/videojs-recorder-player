@@ -6,9 +6,15 @@ const PictureInPicture = ({ togglePip, pipEnabled }) => {
   return (
     <StyledPiPButton onClick={togglePip}>
       {pipEnabled ? (
-        <FontAwesomeIcon icon={'chalkboard'} />
+        <FontAwesomeIcon
+          icon={'external-link-alt'}
+          style={{ transform: 'rotate(270deg)' }}
+        />
       ) : (
-        <FontAwesomeIcon icon={'window-minimize'} />
+        <FontAwesomeIcon
+          icon={'external-link-alt'}
+          style={{ transform: 'rotate(90deg)' }}
+        />
       )}
     </StyledPiPButton>
   )
