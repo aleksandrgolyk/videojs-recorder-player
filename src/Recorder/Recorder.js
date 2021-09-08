@@ -12,6 +12,9 @@ import Dropdown from '../components/Dropdown/Dropdown'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import DeviceSelectionList from '../domains/DeviceSelection/components/DeviceSelectionList'
+import ApproveButtonsBlockAdvancedView from '../domains/ApproveButtonsBlockAdvancedView'
+import RecordButtonsBlockAdvancedView from '../domains/RecordButtonsBlockAdvancedView'
+// import RecordAdvancedView from '../domains/RecordAdvancedView/RecordAdvancedView'
 
 let options = {
   // controls: true,
@@ -43,15 +46,14 @@ export default function Recorder() {
   const [record, setRecord] = useState(false)
   const [loading, setLoading] = useState(true)
   const [deviceList, setDeviceDeviceList] = useState([])
-  const [isRecordButtonsBlockShowing, setIsRecordButtonsBlockShowing] =
-    useState(true)
-
+  const [showRecordButtonsBlock, setShowRecordButtonsBlock] = useState(true)
+  const [showDeviceSelectionList, setShowDeviceSelectionList] = useState(true)
   // record button manipulation - start -
   const recordButtonsBlockAppear = () => {
     setLoading(false)
   }
   const recordButtonsBlockDisappear = () => {
-    setIsRecordButtonsBlockShowing(false)
+    setShowRecordButtonsBlock(false)
   }
   // record button manipulation - end -
 
@@ -102,6 +104,7 @@ export default function Recorder() {
     player?.record()?.start()
     console.log('Media recording is going!')
     setRecord(true)
+    setShowDeviceSelectionList(false)
     // console.log(record)
   }
   // user clicked the stop record button and stopped recording
@@ -114,62 +117,37 @@ export default function Recorder() {
   const onReplayRecord = () => {
     setRecord(false)
     player?.play()
+    console.log('video replaying')
   }
 
   return (
     <div className="App" style={{ position: 'relative' }}>
       <video id="myVideo" playsInline className="video-js vjs-default-skin" />
-      <DeviceSelectionList
-        player={player}
-        videoDevices={videoDevices}
-        audioDevices={audioDevices}
-      />
       {loading ? (
         <Spinner />
       ) : (
         <>
-          {isRecordButtonsBlockShowing ? (
-            <div className="recordButtonsGroupWrapper">
-              {record ? (
-                <div className="magnetWrapper">
-                  <button
-                    className="recorderButtons recorderStopButton"
-                    onClick={onRecordStop}
-                  />
-                </div>
-              ) : (
-                <div className="magnetWrapper">
-                  <button
-                    className="recorderButtons recorderRecordButton"
-                    onClick={onRecordStart}
-                  />
-                </div>
-              )}
-            </div>
+          {showRecordButtonsBlock ? (
+            <>
+              <RecordButtonsBlockAdvancedView
+                onRecordStop={onRecordStop}
+                onRecordStart={onRecordStart}
+                record={record}
+              />
+              <DeviceSelectionList
+                player={player}
+                videoDevices={videoDevices}
+                audioDevices={audioDevices}
+                showDeviceSelectionList={showDeviceSelectionList}
+              />
+            </>
           ) : (
-            <div className="approveVideoBlockWrapper">
-              <div className="approveVideoBlockQuestion">Like it?</div>
-              <div className="approveVideoBlockBtnGroup">
-                <button
-                  className="approveVideoBlockBtn approveBtn"
-                  // onClick={() => console.log('1')}>
-                  onClick={console.log('bad video_')}>
-                  YES
-                </button>
-                <button
-                  className="approveVideoBlockBtn refuseBtn"
-                  onClick={(e) => {
-                    setIsRecordButtonsBlockShowing(true)
-                  }}>
-                  NO
-                </button>
-                <button
-                  className="approveVideoBlockBtn replayBtn"
-                  onClick={onReplayRecord}>
-                  {/*Replay*/}
-                </button>
-              </div>
-            </div>
+            <ApproveButtonsBlockAdvancedView
+              player={player}
+              setShowRecordButtonsBlock={setShowRecordButtonsBlock}
+              setShowDeviceSelectionList={setShowDeviceSelectionList}
+              onReplayRecord={onReplayRecord}
+            />
           )}
         </>
       )}

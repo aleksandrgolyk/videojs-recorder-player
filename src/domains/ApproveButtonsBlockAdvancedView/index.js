@@ -1,0 +1,2 @@
+import ApproveButtonsBlockAdvancedView from './ApproveButtonsBlockAdvancedView'
+export default ApproveButtonsBlockAdvancedView

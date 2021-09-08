@@ -1,0 +1,2 @@
+import RecordButtonsBlockAdvancedView from './RecordButtonsBlockAdvancedView'
+export default RecordButtonsBlockAdvancedView
