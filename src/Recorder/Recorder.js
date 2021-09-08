@@ -5,7 +5,7 @@ import 'videojs-record/dist/css/videojs.record.css'
 import 'videojs-record/dist/videojs.record.js'
 import '../styles.css'
 import './Recorder.styles.css'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import magnetButton from './helpers/magnetButton'
 import Spinner from '../components/Spinner/Spinner'
 import Dropdown from '../components/Dropdown/Dropdown'
@@ -14,7 +14,20 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import DeviceSelectionList from '../domains/DeviceSelection/components/DeviceSelectionList'
 import ApproveButtonsBlockAdvancedView from '../domains/ApproveButtonsBlockAdvancedView'
 import RecordButtonsBlockAdvancedView from '../domains/RecordButtonsBlockAdvancedView'
+import PictureInPicture from '../domains/DeviceSelection/components/PictureInPicture'
 // import RecordAdvancedView from '../domains/RecordAdvancedView/RecordAdvancedView'
+
+// ===PiP options===
+let pipEnabled = false
+let pipStatusMsg
+if (!('pictureInPictureEnabled' in document)) {
+  pipStatusMsg = 'The Picture-in-Picture API is not available.'
+} else if (!document.pictureInPictureEnabled) {
+  pipStatusMsg = 'The Picture-in-Picture API is disabled.'
+} else {
+  pipEnabled = true
+}
+// ===PiP options===
 
 let options = {
   // controls: true,
@@ -31,7 +44,9 @@ let options = {
       maxLength: 30, //set video record duration in sec.
       displayMilliseconds: false,
       // fire the timestamp event every 5 seconds
-      timeSlice: 2000
+      timeSlice: 2000,
+      pip: pipEnabled,
+      debug: true
       // frameWidth: 640,
       // frameHeight: 480
       // frameWidth: 1280,
@@ -48,6 +63,7 @@ export default function Recorder() {
   const [deviceList, setDeviceDeviceList] = useState([])
   const [showRecordButtonsBlock, setShowRecordButtonsBlock] = useState(true)
   const [showDeviceSelectionList, setShowDeviceSelectionList] = useState(true)
+  const [pipEnabled, setPipEnabled] = useState(false)
   // record button manipulation - start -
   const recordButtonsBlockAppear = () => {
     setLoading(false)
@@ -55,6 +71,9 @@ export default function Recorder() {
   const recordButtonsBlockDisappear = () => {
     setShowRecordButtonsBlock(false)
   }
+  // const toggletPip = () => {
+  //   setPipEnabled(true)
+  // }
   // record button manipulation - end -
 
   useEffect(() => {
@@ -81,6 +100,35 @@ export default function Recorder() {
     player.on('ended', function () {
       player.record().reset()
     })
+
+    // ====PiP==== start
+    // handle Picture-in-Picture events
+    let pipWindow
+    player.on('enterPIP', function (element, evt) {
+      console.log('Entered Picture-in-Picture')
+      setPipEnabled(true)
+
+      // listen for window resize
+      pipWindow = evt.pictureInPictureWindow
+      pipWindow.addEventListener('resize', onPipWindowResize)
+
+      console.log(`Window size is ${pipWindow.width} x ${pipWindow.height}`)
+    })
+    player.on('leavePIP', function () {
+      console.log('Left Picture-in-Picture')
+      setPipEnabled(false)
+
+      // stop listening for resize
+      pipWindow.removeEventListener('resize', onPipWindowResize)
+    })
+
+    function onPipWindowResize(evt) {
+      // print window size to console
+      console.log(
+        `Window size changed to ${pipWindow.width} x ${pipWindow.height}`
+      )
+    }
+    // ====PiP==== end
 
     player.on('finishRecord', recordButtonsBlockDisappear)
 
@@ -120,6 +168,16 @@ export default function Recorder() {
     console.log('video replaying')
   }
 
+  const togglePip = async () => {
+    if (player.record().mediaElement !== document.pictureInPictureElement) {
+      await player.record().mediaElement.requestPictureInPicture()
+      setPipEnabled(true)
+    } else {
+      await document.exitPictureInPicture()
+      setPipEnabled(false)
+    }
+  }
+
   return (
     <div className="App" style={{ position: 'relative' }}>
       <video id="myVideo" playsInline className="video-js vjs-default-skin" />
@@ -129,6 +187,8 @@ export default function Recorder() {
         <>
           {showRecordButtonsBlock ? (
             <>
+              <PictureInPicture pipEnabled={pipEnabled} togglePip={togglePip} />
+
               <RecordButtonsBlockAdvancedView
                 onRecordStop={onRecordStop}
                 onRecordStart={onRecordStart}

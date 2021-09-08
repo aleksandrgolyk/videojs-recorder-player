@@ -1,4 +1,5 @@
 import React from 'react'
+import PictureInPicture from '../DeviceSelection/components/PictureInPicture'
 
 const RecordButtonsBlockAdvancedView = ({
   record,
@@ -8,6 +9,7 @@ const RecordButtonsBlockAdvancedView = ({
   return (
     <>
       <div className="recordButtonsGroupWrapper">
+        {/*<PictureInPicture pipEnabled={pipEnabled} togglePip={togglePip} />*/}
         {record ? (
           <div className="magnetWrapper">
             <button

@@ -1,4 +1,8 @@
 /*== Record section == start*/
+.testIcon::before{
+content:'\f108'
+}
+
 .recordButtonsGroupWrapper {
     position: absolute;
     bottom: 10%;
