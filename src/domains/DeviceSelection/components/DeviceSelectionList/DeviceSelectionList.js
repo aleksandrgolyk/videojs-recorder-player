@@ -1,8 +1,8 @@
 import React from 'react'
-import Dropdown from '../../../../components/Dropdown/Dropdown'
 import { StyledDeviceSelectionList } from './DeviceSelection.styles'
-import { faCoffee, video } from '@fortawesome/fontawesome-free-solid'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import VideoSelection from '../VideoSelection'
+import AudioSelection from '../AudioSelection'
+import ScreenRecorder from '../ScreenRecorder'
 
 const DeviceSelectionList = ({
   videoDevices,
@@ -13,22 +13,9 @@ const DeviceSelectionList = ({
   return (
     showDeviceSelectionList && (
       <StyledDeviceSelectionList>
-        <Dropdown
-          deviceList={videoDevices}
-          player={player}
-          isVideo
-          id={1}
-          type={'Cs'}
-          icon={<FontAwesomeIcon icon={'video'} />}
-        />
-        <Dropdown
-          deviceList={audioDevices}
-          player={player}
-          isAudio
-          id={2}
-          type={'As'}
-          icon={<FontAwesomeIcon icon={'microphone'} />}
-        />
+        <VideoSelection deviceList={videoDevices} player={player} />
+        <AudioSelection deviceList={audioDevices} player={player} />
+        <ScreenRecorder />
       </StyledDeviceSelectionList>
     )
   )

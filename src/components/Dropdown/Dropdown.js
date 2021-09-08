@@ -1,18 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
-import './Dropdown.css'
 import {
   StyledDropdown,
   StyledDropdownButton,
   StyledDropdownItem,
   StyledDropdownItemBtn
 } from './Dropdown.styles'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckSquare, faCoffee } from '@fortawesome/fontawesome-free-solid'
 
 const Dropdown = ({ deviceList, id, type, isVideo, isAudio, player, icon }) => {
-  // console.log('videoDevices:!!!!', videoDevices)
-  // console.log('videoDevices:!!!!', videoDevices)
-  // console.log('deviceList', deviceList)
   const ref = useRef()
   const [isDropdownMenuVisible, setIsDropdownMenuVisible] = useState(false)
 

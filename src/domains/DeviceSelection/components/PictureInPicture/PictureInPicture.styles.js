@@ -4,11 +4,9 @@ export const StyledPiPButton = styled.button`
   cursor: pointer;
   position: absolute;
   bottom: 5%;
-  // right: 0,
   display: flex;
   justify-content: center;
   align-items: center;
-  /* left: 50%; */
   border: none;
   height: 25px;
   width: 25px;
@@ -16,10 +14,10 @@ export const StyledPiPButton = styled.button`
   background: rgba(17, 17, 17, 0.6);
   color: rgba(255, 255, 255, 1);
   box-sizing: inherit;
-  //&:hover,
-  //:focus {
-  //  background-color: rgba(68, 56, 56, 0.6);
-  //  color: rgba(255, 255, 255, 1);
-  //  transform: scale(1.1);
-  //}
+  &:hover,
+  :focus {
+    background-color: rgba(68, 56, 56, 0.6);
+    color: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
 `

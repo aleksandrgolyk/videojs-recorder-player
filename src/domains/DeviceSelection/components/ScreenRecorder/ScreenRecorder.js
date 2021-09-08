@@ -1,7 +1,13 @@
 import React from 'react'
+import { StyledScreenRecorder } from './ScreenRecorder.styles'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const ScreenRecorder = () => {
-  return <div></div>
+  return (
+    <StyledScreenRecorder>
+      <FontAwesomeIcon icon="desktop" />
+    </StyledScreenRecorder>
+  )
 }
 
 export default ScreenRecorder

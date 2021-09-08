@@ -6,7 +6,7 @@ const PictureInPicture = ({ togglePip, pipEnabled }) => {
   return (
     <StyledPiPButton onClick={togglePip}>
       {pipEnabled ? (
-        <FontAwesomeIcon icon={'window-restore'} />
+        <FontAwesomeIcon icon={'chalkboard'} />
       ) : (
         <FontAwesomeIcon icon={'window-minimize'} />
       )}
