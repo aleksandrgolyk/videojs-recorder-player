@@ -6,8 +6,10 @@ import {
   StyledDropdownItem,
   StyledDropdownItemBtn
 } from './Dropdown.styles'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckSquare, faCoffee } from '@fortawesome/fontawesome-free-solid'
 
-const Dropdown = ({ deviceList, id, type, isVideo, isAudio, player }) => {
+const Dropdown = ({ deviceList, id, type, isVideo, isAudio, player, icon }) => {
   // console.log('videoDevices:!!!!', videoDevices)
   // console.log('videoDevices:!!!!', videoDevices)
   // console.log('deviceList', deviceList)
@@ -53,7 +55,7 @@ const Dropdown = ({ deviceList, id, type, isVideo, isAudio, player }) => {
   return (
     <StyledDropdown ref={ref}>
       <StyledDropdownButton onClick={onDropdownClick}>
-        {type}
+        {icon}
       </StyledDropdownButton>
       {isDropdownMenuVisible && (
         <StyledDropdownItem id={id}>

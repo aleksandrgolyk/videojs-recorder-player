@@ -2,6 +2,9 @@ import styled from 'styled-components'
 
 export const StyledDropdown = styled.div`
   top: 10px;
+  //display: flex;
+  //justify-content: space-between;
+  //align-items: center;
 `
 export const StyledDropdownButton = styled.div`
   background-color: #3498db;
@@ -12,7 +15,9 @@ export const StyledDropdownButton = styled.div`
   cursor: pointer;
   border-radius: 50%;
   margin-right: 10px;
-
+  width: 50px;
+  height: 50px;
+}
   &:hover,
   :focus {
     background-color: #2980b9;

@@ -1,6 +1,8 @@
 import React from 'react'
 import Dropdown from '../../../../components/Dropdown/Dropdown'
 import { StyledDeviceSelectionList } from './DeviceSelection.styles'
+import { faCoffee, video } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const DeviceSelectionList = ({ videoDevices, audioDevices, player }) => {
   return (
@@ -11,6 +13,7 @@ const DeviceSelectionList = ({ videoDevices, audioDevices, player }) => {
         isVideo
         id={1}
         type={'Cs'}
+        icon={<FontAwesomeIcon icon={'video'} />}
       />
       <Dropdown
         deviceList={audioDevices}
@@ -18,6 +21,7 @@ const DeviceSelectionList = ({ videoDevices, audioDevices, player }) => {
         isAudio
         id={2}
         type={'As'}
+        icon={<FontAwesomeIcon icon={'microphone'} />}
       />
     </StyledDeviceSelectionList>
   )

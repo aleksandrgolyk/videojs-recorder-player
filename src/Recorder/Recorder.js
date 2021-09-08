@@ -16,8 +16,8 @@ import DeviceSelectionList from '../domains/DeviceSelection/components/DeviceSel
 let options = {
   // controls: true,
   bigPlayButton: false,
-  // width: 800,
-  // height: 600,
+  width: 800,
+  height: 600,
   // loop:true,
   // fluid: true,
   autoplay: true,
@@ -28,9 +28,11 @@ let options = {
       maxLength: 30, //set video record duration in sec.
       displayMilliseconds: false,
       // fire the timestamp event every 5 seconds
-      timeSlice: 2000,
-      frameWidth: 640,
-      frameHeight: 480
+      timeSlice: 2000
+      // frameWidth: 640,
+      // frameHeight: 480
+      // frameWidth: 1280,
+      // frameHeight: 960
     }
   }
 }
@@ -54,15 +56,8 @@ export default function Recorder() {
   // record button manipulation - end -
 
   useEffect(() => {
-    let player = videojs('myVideo', options, function () {
-      // print version information at startup to console
-    })
+    let player = videojs('myVideo', options, function () {})
     setPlayer(player)
-
-    // Helpers
-    function setDeviceId(deviceId) {
-      player?.record()?.setVideoInput(deviceId)
-    }
 
     // ===== DEVICES TRACKING AND SHOW SECTION ---start ----
     // enumerate devices once
@@ -71,10 +66,7 @@ export default function Recorder() {
     })
 
     player.on('enumerateReady', function () {
-      const devices = player.record().devices
-      // const mediaDevices = console.log(mediaDevices)
-      setDeviceDeviceList(devices)
-      // console.log(devices)
+      setDeviceDeviceList(player.record().devices)
     })
     // ===== DEVICES TRACKING AND SHOW SECTION ---end ----
 
@@ -181,8 +173,6 @@ export default function Recorder() {
           )}
         </>
       )}
-
-      {/*<SwitchInputDevice player={player}/>  /* for nex improvements*/}
     </div>
   )
 }
