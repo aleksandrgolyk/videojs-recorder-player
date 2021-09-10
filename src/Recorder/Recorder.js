@@ -87,9 +87,9 @@ export default function Recorder() {
       player.record().enumerateDevices()
     })
 
-    player.on('enumerateReady', function () {
-      setDeviceDeviceList(player.record().devices)
-    })
+    // player.on('enumerateReady', function () {
+    //   setDeviceDeviceList(player.record().devices)
+    // })
     // ===== DEVICES TRACKING AND SHOW SECTION ---end ----
 
     // Started record devices
@@ -130,8 +130,88 @@ export default function Recorder() {
       )
     }
     // ====PiP==== end
+    const readFileAsBuffer = (file) => {
+      return new Promise((resolve, reject) => {
+        // Create file reader
+        let reader = new FileReader()
+        // Register event listeners
+        reader.addEventListener('loadend', (e) => resolve(e.target.result))
+        reader.addEventListener('error', reject)
+
+        // Read file
+        reader.readAsArrayBuffer(file)
+      })
+    }
+    const getAsByteArray = async (file) => {
+      return new Uint8Array(await readFileAsBuffer(file))
+    }
+    // ========UPLOAD======
+    // async function upload(blob) {
+    //   console.log(blob)
+    //   const arr = await getAsByteArray(blob)
+    //   console.log('ArrBuffer', arr)
+    //   // this upload handler is served using webpack-dev-server for
+    //   // this example, see build-config/fragments/dev.js
+    //   let serverUrl = 'http://192.168.0.128:5000/convert'
+    //   let formData = new FormData()
+    //   formData.append('fname', blob.name)
+    //   formData.append('data', blob)
+    //
+    //   const tmpFile = new File([blob], blob.name)
+    //   // console.log('upload recording ' + blob.name + ' to ' + serverUrl)
+    //   // console.log('formData', formData)
+    //   // console.log(JSON.stringify({ toFormat: 'mp4', file: blob }))
+    //   // start upload
+    //   fetch(serverUrl, {
+    //     method: 'POST',
+    //     body: arr,
+    //     // body: blob
+    //     processData: false,
+    //     contentType: false
+    //   })
+    //     .then((success) => console.log('upload recording complete.'))
+    //     .catch((error) => console.error('an upload error occurred!'))
+    //   let frm = new FormData()
+    //   var xhr = new XMLHttpRequest()
+    //   frm.append('file', tmpFile)
+    //   xhr.open('POST', 'http://192.168.0.128:5000/convert', true)
+    //   xhr.setRequestHeader('Content-type', 'multipart/form-data')
+    //   xhr.send(frm)
+    // }
+    // ========UPLOAD======
+
+    // =============UPLOAD 2
+    player.on('finishRecord', function () {
+      console.log('finished recording: ', player.recordedData)
+      var binaryData = player.recordedData
+      convertVideo(binaryData, 'mp4')
+    })
+    // =============UPLOAD 2
+
+    const convertVideo = (blob, format) => {
+      if (blob) {
+        var formData = new FormData()
+        formData.append('toFormat', format)
+        formData.append('data', blob)
+        fetch('http://192.168.0.128:5000/convert', {
+          method: 'POST',
+          body: formData,
+          // cache: false,
+          processData: false,
+          contentType: false,
+          beforeSend: function () {},
+          success: function (res) {},
+          error: function (res) {}
+        })
+      } else {
+      }
+    }
 
     player.on('finishRecord', recordButtonsBlockDisappear)
+    player.on('finishRecord', async function () {
+      // await upload(player.recordedData)
+      // console.log('recorded-DAta:', player.recordedData)
+    })
 
     player.on('timestamp', function () {
       // console.log("current timestamp: ", player.currentTimestamp);
@@ -170,6 +250,7 @@ export default function Recorder() {
     console.log('video replaying')
   }
   const onApproveRecord = () => {
+    // return
     player.record().saveAs({ video: 'my-video-file-name.webm' })
   }
 
