@@ -193,7 +193,7 @@ export default function Recorder() {
         var formData = new FormData()
         formData.append('toFormat', format)
         formData.append('data', blob)
-        fetch('http://192.168.0.128:5000/convert', {
+        fetch('http://34.65.15.23/convert', {
           method: 'POST',
           body: formData,
           // cache: false,
