@@ -15,6 +15,7 @@ import DeviceSelectionList from '../domains/DeviceSelection/components/DeviceSel
 import ApproveButtonsBlockAdvancedView from '../domains/ApproveButtonsBlockAdvancedView'
 import RecordButtonsBlockAdvancedView from '../domains/RecordButtonsBlockAdvancedView'
 import PictureInPicture from '../domains/DeviceSelection/components/PictureInPicture'
+import uploadToConvert from './helpers/convertVideo'
 // import RecordAdvancedView from '../domains/RecordAdvancedView/RecordAdvancedView'
 
 // ===PiP options===
@@ -145,67 +146,10 @@ export default function Recorder() {
     const getAsByteArray = async (file) => {
       return new Uint8Array(await readFileAsBuffer(file))
     }
-    // ========UPLOAD======
-    // async function upload(blob) {
-    //   console.log(blob)
-    //   const arr = await getAsByteArray(blob)
-    //   console.log('ArrBuffer', arr)
-    //   // this upload handler is served using webpack-dev-server for
-    //   // this example, see build-config/fragments/dev.js
-    //   let serverUrl = 'http://192.168.0.128:5000/convert'
-    //   let formData = new FormData()
-    //   formData.append('fname', blob.name)
-    //   formData.append('data', blob)
-    //
-    //   const tmpFile = new File([blob], blob.name)
-    //   // console.log('upload recording ' + blob.name + ' to ' + serverUrl)
-    //   // console.log('formData', formData)
-    //   // console.log(JSON.stringify({ toFormat: 'mp4', file: blob }))
-    //   // start upload
-    //   fetch(serverUrl, {
-    //     method: 'POST',
-    //     body: arr,
-    //     // body: blob
-    //     processData: false,
-    //     contentType: false
-    //   })
-    //     .then((success) => console.log('upload recording complete.'))
-    //     .catch((error) => console.error('an upload error occurred!'))
-    //   let frm = new FormData()
-    //   var xhr = new XMLHttpRequest()
-    //   frm.append('file', tmpFile)
-    //   xhr.open('POST', 'http://192.168.0.128:5000/convert', true)
-    //   xhr.setRequestHeader('Content-type', 'multipart/form-data')
-    //   xhr.send(frm)
-    // }
-    // ========UPLOAD======
 
-    // =============UPLOAD 2
-    player.on('finishRecord', function () {
-      console.log('finished recording: ', player.recordedData)
-      var binaryData = player.recordedData
-      convertVideo(binaryData, 'mp4')
-    })
-    // =============UPLOAD 2
-
-    const convertVideo = (blob, format) => {
-      if (blob) {
-        var formData = new FormData()
-        formData.append('toFormat', format)
-        formData.append('data', blob)
-        fetch('http://192.168.0.128:5000/convert', {
-          method: 'POST',
-          body: formData,
-          // cache: false,
-          processData: false,
-          contentType: false,
-          beforeSend: function () {},
-          success: function (res) {},
-          error: function (res) {}
-        })
-      } else {
-      }
-    }
+    // =============UPLOAD to convert 2 - START
+    uploadToConvert({ player })
+    // =============UPLOAD to convert 2 - END
 
     player.on('finishRecord', recordButtonsBlockDisappear)
     player.on('finishRecord', async function () {
