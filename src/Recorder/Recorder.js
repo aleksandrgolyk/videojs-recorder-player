@@ -66,7 +66,6 @@ export default function Recorder() {
     player?.record()?.start()
     setRecord(true)
     setShowDeviceSelectionList(false)
-    setShowRecordButtonsBlock(false)
   }
   // // user clicked the stop record button and stopped recording
   const onRecordStop = () => {
