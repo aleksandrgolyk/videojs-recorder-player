@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react'
+import videojs from 'video.js'
+
 import RecorderContext from './RecorderContext'
-import { useState } from 'react'
 import useRecorderActions from './useRecorderActions'
-import magnetButton from "../helpers/magnetButton";
+import magnetButton from '../helpers/magnetButton'
 
 const RecorderProvider = ({ children }) => {
   const [player, setPlayer] = useState({})
@@ -18,7 +20,7 @@ const RecorderProvider = ({ children }) => {
     onApprove,
     onReplay,
     onScreen
-  } = useRecorderActions({...})
+  } = useRecorderActions({ player })
 
   useEffect(() => {
     let player = videojs(id, options, function () {})
@@ -70,3 +72,5 @@ const RecorderProvider = ({ children }) => {
     </RecorderContext.Provider>
   )
 }
+
+export default RecorderProvider

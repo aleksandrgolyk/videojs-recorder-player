@@ -14,6 +14,7 @@ import RecordButtonsBlockAdvancedView from '../domains/RecordButtonsBlockAdvance
 import PictureInPicture from '../domains/DeviceSelection/components/PictureInPicture'
 import uploadToConvert from './helpers/convertVideo'
 import useRecorderActions from './suggestion/useRecorderActions'
+import RecorderProvider from './suggestion/RecorderProvider'
 
 const FORMAT_MP_4 = 'mp4'
 let options = {
