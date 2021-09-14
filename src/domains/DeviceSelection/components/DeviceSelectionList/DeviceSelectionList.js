@@ -8,14 +8,15 @@ const DeviceSelectionList = ({
   videoDevices,
   audioDevices,
   player,
-  showDeviceSelectionList
+  showDeviceSelectionList,
+  onScreenRecord
 }) => {
   return (
     showDeviceSelectionList && (
       <StyledDeviceSelectionList>
         <VideoSelection deviceList={videoDevices} player={player} />
         <AudioSelection deviceList={audioDevices} player={player} />
-        <ScreenRecorder />
+        <ScreenRecorder onScreenRecord={onScreenRecord} />
       </StyledDeviceSelectionList>
     )
   )

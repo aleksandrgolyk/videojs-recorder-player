@@ -1,7 +1,6 @@
 import React from 'react'
-import { video } from '@fortawesome/fontawesome-free-solid'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import '@fortawesome/fontawesome-free-solid'
 import Dropdown from '../../../../components/Dropdown/Dropdown'
 
 const VideoSelection = ({ deviceList, player }) => {

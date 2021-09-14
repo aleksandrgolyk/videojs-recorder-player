@@ -1,17 +1,15 @@
-import React from 'react'
+import { io } from 'socket.io-client'
 
-function uploadToConvert({ player }) {
-  player.on('finishRecord', function () {
-    // console.log('finished recording: ', player.recordedData)
-    var binaryData = player.recordedData
-    convertVideo(binaryData, 'mp4')
-  })
-  const convertVideo = (blob, format) => {
-    if (blob) {
-      var formData = new FormData()
+function uploadToConvert(binaryData, format) {
+  if (binaryData) {
+    const socket = io('http://192.168.0.128:8080').connect()
+    socket.on('connect', () => {
+      const formData = new FormData()
       formData.append('toFormat', format)
-      formData.append('data', blob)
-      fetch('http://34.65.15.23/convert', {
+      formData.append('socketId', socket.id)
+      formData.append('data', binaryData)
+      fetch('http://192.168.0.128:8080/convert', {
+        //'http://34.65.15.23/convert'
         method: 'POST',
         body: formData,
         // cache: false,
@@ -21,8 +19,17 @@ function uploadToConvert({ player }) {
         success: function (res) {},
         error: function (res) {}
       })
-    } else {
-    }
+    })
+    socket.on('error', (err) => {
+      console.log(err)
+    })
+    socket.on('percentage', (percent) => {
+      console.log('Percent', percent)
+    })
+    socket.on('link', (link) => {
+      console.log('link', link)
+      socket.disconnect()
+    })
   }
 }
 export default uploadToConvert

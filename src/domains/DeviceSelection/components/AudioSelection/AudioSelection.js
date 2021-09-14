@@ -1,6 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { microphone } from '@fortawesome/fontawesome-free-solid'
+import '@fortawesome/fontawesome-free-solid'
 
 import Dropdown from '../../../../components/Dropdown/Dropdown'
 
