@@ -1,25 +1,25 @@
 import React from 'react'
+import { useRecorder } from '../../QonsollRecorder/hooks'
 
-const ApproveButtonsBlockAdvancedView = ({
-  setShowRecordButtonsBlock,
-  setShowDeviceSelectionList,
-  onReplayRecord,
-  onApproveRecord,
-  player
-}) => {
+const ApproveButtonsBlockAdvancedView = () => {
+  const {
+    onDeviceLoaded,
+    setShowDeviceSelectionList,
+    onReplayRecord,
+    onApprove,
+    player
+  } = useRecorder()
   return (
     <div className="approveVideoBlockWrapper">
       <div className="approveVideoBlockQuestion">Like it?</div>
       <div className="approveVideoBlockBtnGroup">
-        <button
-          className="approveVideoBlockBtn approveBtn"
-          onClick={onApproveRecord}>
+        <button className="approveVideoBlockBtn approveBtn" onClick={onApprove}>
           YES
         </button>
         <button
           className="approveVideoBlockBtn refuseBtn"
           onClick={(e) => {
-            setShowRecordButtonsBlock(true)
+            onDeviceLoaded(true)
             setShowDeviceSelectionList(true)
 
             player.record().getDevice()

@@ -1,6 +1,6 @@
 import React from 'react'
 import { RecorderProvider } from '../contexts'
-import RecorderWrapper from '../../Recorder/RecorderWrapper'
+import RecorderWrapper from '../components/RecorderWrapper'
 
 const Recorder = () => {
   return (

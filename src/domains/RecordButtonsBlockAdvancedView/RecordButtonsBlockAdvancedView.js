@@ -1,11 +1,9 @@
 import React from 'react'
 import PictureInPicture from '../DeviceSelection/components/PictureInPicture'
+import { useRecorder } from '../../QonsollRecorder/hooks'
 
-const RecordButtonsBlockAdvancedView = ({
-  record,
-  onRecordStop,
-  onRecordStart
-}) => {
+const RecordButtonsBlockAdvancedView = () => {
+  const { record, onStop, onStart } = useRecorder()
   return (
     <>
       <div className="recordButtonsGroupWrapper">
@@ -14,14 +12,14 @@ const RecordButtonsBlockAdvancedView = ({
           <div className="magnetWrapper">
             <button
               className="recorderButtons recorderStopButton"
-              onClick={onRecordStop}
+              onClick={onStop}
             />
           </div>
         ) : (
           <div className="magnetWrapper">
             <button
               className="recorderButtons recorderRecordButton"
-              onClick={onRecordStart}
+              onClick={onStart}
             />
           </div>
         )}

@@ -2,7 +2,7 @@ import 'video.js/dist/video-js.min.css'
 import 'videojs-record/dist/css/videojs.record.css'
 import 'videojs-record/dist/videojs.record.js'
 import './styles.css'
-import Recorder from './Recorder/Recorder'
+import Recorder from './QonsollRecorder/components/Recorder'
 
 let options1 = {
   // controls: true,
@@ -60,8 +60,7 @@ let options2 = {
 export default function App() {
   return (
     <>
-      <Recorder id={'test1'} options={options1} />
-      <Recorder id={'test2'} options={options2} />
+      <Recorder />
     </>
   )
 }

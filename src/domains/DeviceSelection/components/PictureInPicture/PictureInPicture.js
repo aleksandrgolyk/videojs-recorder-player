@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StyledPiPButton } from './PictureInPicture.styles'
+import { useRecorder } from '../../../../QonsollRecorder/hooks'
 
-const PictureInPicture = ({ player }) => {
+const PictureInPicture = () => {
   const [pipEnabled, setPipEnabled] = useState(false)
-
+  const { player } = useRecorder()
   const togglePip = async () => {
     console.log(player)
     if (Object?.keys(player)?.length > 0) {

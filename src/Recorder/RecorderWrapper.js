@@ -1,6 +1,14 @@
 import React from 'react'
+import { useRecorder } from '../QonsollRecorder/hooks'
+import Spinner from '../components/Spinner/Spinner'
+import PictureInPicture from '../domains/DeviceSelection/components/PictureInPicture'
+import RecordButtonsBlockAdvancedView from '../domains/RecordButtonsBlockAdvancedView'
+import DeviceSelectionList from '../domains/DeviceSelection/components/DeviceSelectionList'
+import ApproveButtonsBlockAdvancedView from '../domains/ApproveButtonsBlockAdvancedView'
 
 const RecorderWrapper = () => {
+  const { loading, showRecordButtonsBlock } = useRecorder()
+
   return (
     <div className="App" style={{ position: 'relative' }}>
       <video id="myVideo" playsInline className="video-js vjs-default-skin" />
@@ -11,28 +19,12 @@ const RecorderWrapper = () => {
         <>
           {showRecordButtonsBlock ? (
             <>
-              <PictureInPicture player={player} />
-              <RecordButtonsBlockAdvancedView
-                onRecordStop={onRecordStop}
-                onRecordStart={onRecordStart}
-                record={record}
-              />
-              <DeviceSelectionList
-                player={player}
-                videoDevices={videoDevices}
-                audioDevices={audioDevices}
-                showDeviceSelectionList={showDeviceSelectionList}
-                onScreenRecord={onScreenRecord}
-              />
+              <PictureInPicture />
+              <RecordButtonsBlockAdvancedView />
+              <DeviceSelectionList />
             </>
           ) : (
-            <ApproveButtonsBlockAdvancedView
-              player={player}
-              setShowRecordButtonsBlock={setShowRecordButtonsBlock}
-              setShowDeviceSelectionList={setShowDeviceSelectionList}
-              onReplayRecord={onReplayRecord}
-              onApproveRecord={onApproveRecord}
-            />
+            <ApproveButtonsBlockAdvancedView />
           )}
         </>
       )}
