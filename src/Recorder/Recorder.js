@@ -15,6 +15,7 @@ import PictureInPicture from '../domains/DeviceSelection/components/PictureInPic
 import uploadToConvert from './helpers/convertVideo'
 import useRecorderActions from './suggestion/useRecorderActions'
 import RecorderProvider from './suggestion/RecorderProvider'
+import RecorderWrapper from './RecorderWrapper'
 
 const FORMAT_MP_4 = 'mp4'
 let options = {
@@ -46,10 +47,8 @@ let options = {
 
 export default function Recorder({ id, options }) {
   // const inputDeviceIdIndex = useRef(0)
-  const [player, setPlayer] = useState({})
   const [record, setRecord] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [deviceList, setDeviceDeviceList] = useState([])
   const [showRecordButtonsBlock, setShowRecordButtonsBlock] = useState(true)
   const [showDeviceSelectionList, setShowDeviceSelectionList] = useState(true)
   const {
@@ -100,67 +99,11 @@ export default function Recorder({ id, options }) {
   // }
   // ============Screen recorder===========
 
-  useEffect(() => {
-    let player = videojs(id, options, function () {})
-    setPlayer(player)
-
-    // ===== DEVICES TRACKING AND SHOW SECTION ---start ----
-    // enumerate devices once
-    player.one('deviceReady', function () {
-      player.record().enumerateDevices()
-    })
-    player.on('enumerateReady', function () {
-      setDeviceDeviceList(player.record().devices)
-    })
-    // ===== DEVICES TRACKING AND SHOW SECTION ---end ----
-
-    // Started record devices
-    player.record().getDevice()
-
-    //Appear record button on pade load - show/hide
-    player.on('deviceReady', recordButtonsBlockAppear)
-    player.on('deviceReady', magnetButton)
-    player.on('finishRecord', recordButtonsBlockDisappear)
-  }, [])
-
   return (
     <RecorderProvider>
-      <Recorder /> // video, buttons - const recorder = useRecorder()
+      {/*// video, buttons - const recorder = useRecorder()*/}
+      <RecorderWrapper />
     </RecorderProvider>
-    // <div className="App" style={{ position: 'relative' }}>
-    //   <video id={id} playsInline className="video-js vjs-default-skin" /> //
-    //   separate component
-    //   {loading ? (
-    //     <Spinner />
-    //   ) : (
-    //     <>
-    //       {showRecordButtonsBlock ? (
-    //         <>
-    //           <PictureInPicture player={player} />
-    //           <RecordButtonsBlockAdvancedView
-    //             onRecordStop={onRecordStop}
-    //             onRecordStart={onRecordStart}
-    //             record={record}
-    //           />
-    //           <DeviceSelectionList
-    //             player={player}
-    //             videoDevices={videoDevices}
-    //             audioDevices={audioDevices}
-    //             showDeviceSelectionList={showDeviceSelectionList}
-    //             onScreenRecord={onScreenRecord}
-    //           />
-    //         </>
-    //       ) : (
-    //         <ApproveButtonsBlockAdvancedView
-    //           player={player}
-    //           setShowRecordButtonsBlock={setShowRecordButtonsBlock}
-    //           setShowDeviceSelectionList={setShowDeviceSelectionList}
-    //           onReplayRecord={onReplayRecord}
-    //           onApproveRecord={onApproveRecord}
-    //         />
-    //       )}
-    //     </>
-    //   )}
-    // </div>
+    //
   )
 }
