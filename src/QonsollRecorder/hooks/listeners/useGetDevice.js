@@ -1,11 +1,10 @@
 import useRecorder from '../useRecorder'
 import { useEffect } from 'react'
 
-const useGetDevice = () => {
-  const { player } = useRecorder()
+const useGetDevice = (player) => {
   useEffect(() => {
     player.record().getDevice()
-  }, [player])
+  }, [])
 
   return () => {}
 }

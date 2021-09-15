@@ -7,8 +7,8 @@ import {
   useOnFinishRecord
 } from './listeners'
 
-const useInit = (recorderId) => {
-  const player = useCreatePlayer(recorderId)
+const useInit = (recorderId, options) => {
+  const player = useCreatePlayer(recorderId, options)
   const deviceList = useEnumerateReady(player)
   useDeviceReady(player)
   useGetDevice(player)
